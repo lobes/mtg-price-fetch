@@ -8,20 +8,49 @@ while (true)
     if (cardName.Length == 0) return;
 
     Console.WriteLine("Set?");
-    var set = Console.ReadLine();
-    if (set.Length == 0) return;
+    var setName = Console.ReadLine();
+    if (setName.Length == 0) return;
 
-    //var cardName = "bayou";
+    /*
+    var cardName = "bayou";
+    var setName = "alpha";
+    */
 
     // make the api call
     var web = new HtmlWeb();
     Console.WriteLine("Fetching...");
-    var doc = web.Load($"http://api.scraperapi.com?api_key=a1aef8c96041b3087159f7bb9c3519b7&url=https://starcitygames.com/search/?search_query={cardName}&filter_set={set}&render=true");
-    // get the price
-    // save it to card.price
-    var rows = doc.DocumentNode.CssSelect(".hawk-results-item__options-table-cell--price");
+    var doc = web.Load($"http://api.scraperapi.com?api_key=a1aef8c96041b3087159f7bb9c3519b7&url=https://starcitygames.com/search/?search_query={cardName}&render=true");
+    var rows = doc.DocumentNode.CssSelect(".hawk-results-item");
 
-    var price = rows.First().InnerHtml;
-    price = price.Replace("$", "");
-    Console.WriteLine(price);
+    foreach (var row in rows)
+    {
+        // get the price
+        var nameNode = row.CssSelect
+            (".hawk-results-item__header > .hawk-headerDiv > .hawk-results-item__title")
+            .First()
+            .InnerText
+            .Replace(",", "")
+            .ToLower();
+        var setNode = row.CssSelect
+            (".hawk-results-item__header > .hawk-headerDiv > .hawk-results-item__category")
+            .First()
+            .InnerText
+            .Replace(",", "")
+            .ToLower();
+
+        if (cardName.Replace(",", "").ToLower().Equals(nameNode) &&
+            setNode.Contains(setName.Replace(",", "").ToLower()))
+        {
+            var price = row.CssSelect(".hawk-results-item__options-table-cell--price")
+                .First()
+                .InnerText
+                .Replace("$", "");
+            var cond = row.CssSelect(".hawk-results-item__options-table-cell--name")
+                .First()
+                .InnerText;
+
+            Console.WriteLine(price);
+            break;
+        }
+    }
 }

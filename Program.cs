@@ -11,6 +11,10 @@ while (true)
     var setName = Console.ReadLine();
     if (setName.Length == 0) return;
 
+    Console.WriteLine("Foil? [y] [N]");
+    var foil = Console.ReadLine();
+    var isFoil = false;
+    if (foil.ToLower().Contains("yes") || foil.ToLower().Contains("y")) isFoil = true;
     /*
     var cardName = "bayou";
     var setName = "alpha";
@@ -37,6 +41,9 @@ while (true)
             .InnerText
             .Replace(",", "")
             .ToLower();
+
+        if (setNode.ToLower().Contains("foil") && !isFoil) continue;
+        if (!setNode.ToLower().Contains("foil") && isFoil) continue;
 
         if (cardName.Replace(",", "").ToLower().Equals(nameNode) &&
             setNode.Contains(setName.Replace(",", "").ToLower()))

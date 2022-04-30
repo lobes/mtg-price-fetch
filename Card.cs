@@ -1,6 +1,6 @@
 public class Card
 {
-    public string? name;
-    public string? set;
-    public float? price;
+    public string? name { get; set; }
+    public string? set { get; set; }
+    public float? price { get; set; }
 }

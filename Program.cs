@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
 using ScrapySharp.Extensions;
+using System;
+using System.Linq;
 
 while (true)
 {
